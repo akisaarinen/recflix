@@ -1,7 +1,7 @@
 .movieList {
   display: flex;
   min-width: 100%;
-  min-height: 200px;
+  min-height: 170px;
   overflow-x: auto;
 }
 
@@ -12,8 +12,6 @@
 .movieList--content {
   background-color: gray;
   min-width: 300px;
-  margin: 5px;
-  box-shadow: 3px 5px rgba(255,255,255,0.05);
 }
 
 .movieList--content__box{
@@ -21,6 +19,12 @@
   display: inline-block;
   width: 100%;
   height: 100%;
+  border: 2px solid black;
+}
+
+.movieList--content__box:hover{
+  font-weight: bold;
+  border: 2px solid white;
 }
 
 .movieList--content__box .textOverlay{
