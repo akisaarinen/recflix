@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Image } from 'react-bootstrap'
+import { Image } from 'react-bootstrap'
 
 import * as api from '../api/client'
 
