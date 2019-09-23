@@ -42,7 +42,7 @@ export const Home: React.FunctionComponent<any> = (props) => {
   useEffect(() => {
     if (lists.recommended.length > 0) return
     fetchLists()
-  }, [lists, setLists])
+  })
 
   return (<>
     <h4>Recommended for you</h4>
