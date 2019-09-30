@@ -19,30 +19,23 @@ export const Home: React.FunctionComponent<any> = (props) => {
     highlyRated: [],
   })
 
-  const fetchMovieById = async(movieId: api.MovieId): Promise<api.Movie> => {
-    const movie = await api.getMovie({ movieId })
-    if (movie !== null) {
-      return movie
-    }
-    throw new Error(`Movie information not found for ${movieId}`)
-  }
-
   const fetchLists = async() => {
     const params = { userId: "dummy" }
 
+    // TODO: Error handling
     const [recommended, popular, highlyRated] = await Promise.all([
-      api.getRecommendedMovies(params)
-        .then(movieIds => Promise.all(movieIds.map(fetchMovieById))),
-      api.getRecommendedMovies(params)
-        .then(movieIds => Promise.all(movieIds.map(fetchMovieById))),
-      api.getRecommendedMovies(params)
-        .then(movieIds => Promise.all(movieIds.map(fetchMovieById)))
+      api.getRecommendedMovies(params).catch(error => []),
+      api.getRecentlyPopularMovies(params).catch(error => []),
+      api.getHighlyRatedMovies(params).catch(error => []),
     ])
     setLists({ recommended, popular, highlyRated })
   }
 
   useEffect(() => {
-    if (lists.recommended.length > 0) return
+    if (lists.popular.length > 0 ||
+      lists.recommended.length > 0 ||
+      lists.highlyRated.length > 0)
+      return
     fetchLists()
   })
 

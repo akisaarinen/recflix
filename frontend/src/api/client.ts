@@ -1,4 +1,3 @@
-import * as dummyData from "./dummyData"
 import axios from 'axios'
 
 const httpClient = axios.create({
@@ -30,31 +29,30 @@ export async function getMovie(params: {
 
 export async function getRecommendedMovies(params: {
   userId: string
-}): Promise<MovieId[]> {
-  const allMovies = Object.keys(dummyData.movies)
-  shuffleArrayInPlace(allMovies)
-  return Promise.resolve(allMovies)
+}): Promise<Movie[]> {
+  return httpClient
+    .get<Movie[]>(`recommendation/personalized`)
+    .then(response => {
+      return response.data
+    })
 }
 
 export async function getRecentlyPopularMovies(params: {
   userId: string
-}): Promise<MovieId[]> {
-  const allMovies = Object.keys(dummyData.movies)
-  shuffleArrayInPlace(allMovies)
-  return Promise.resolve(allMovies)
+}): Promise<Movie[]> {
+  return httpClient
+    .get<Movie[]>(`recommendation/recentPopular`)
+    .then(response => {
+      return response.data
+    })
 }
 
 export async function getHighlyRatedMovies(params: {
   userId: string
-}): Promise<MovieId[]> {
-  const allMovies = Object.keys(dummyData.movies)
-  shuffleArrayInPlace(allMovies)
-  return Promise.resolve(allMovies)
-}
-
-function shuffleArrayInPlace<T>(array: T[]) {
-  for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-  }
+}): Promise<Movie[]> {
+  return httpClient
+    .get<Movie[]>(`recommendation/highlyRated`)
+    .then(response => {
+      return response.data
+    })
 }
