@@ -1,4 +1,10 @@
 import * as dummyData from "./dummyData"
+import axios from 'axios'
+
+const httpClient = axios.create({
+  baseURL: "http://localhost:5000/api/v1/",
+  withCredentials: false,
+})
 
 export type MovieId = string
 
@@ -6,7 +12,7 @@ export interface Movie {
   id: string,
   imdbId: string,
   title: string,
-  releaseDate: string,
+  releaseYear: number,
   imageUrl: string,
 }
 
@@ -15,15 +21,11 @@ export type Recommendations = MovieId[]
 export async function getMovie(params: {
   movieId: string,
 }): Promise<Movie|null> {
-  const data: { [key: string]: any } = dummyData.movies[params.movieId] || {}
-  const movie = {
-    id: data["id"],
-    imdbId: data["imdb_id"],
-    title: data["title"],
-    releaseDate: data["release_date"],
-    imageUrl: tmdbImageBasePath + data["backdrop_path"]
-  }
-  return Promise.resolve(movie)
+  return httpClient
+    .get<Movie>(`movie/${params.movieId}`)
+    .then(response => {
+      return response.data
+    })
 }
 
 export async function getRecommendedMovies(params: {
@@ -49,10 +51,6 @@ export async function getHighlyRatedMovies(params: {
   shuffleArrayInPlace(allMovies)
   return Promise.resolve(allMovies)
 }
-
-// TODO: If using from tmdb, should fetch from configuration API
-//       as the URL may change.
-const tmdbImageBasePath = "https://image.tmdb.org/t/p/w500/"
 
 function shuffleArrayInPlace<T>(array: T[]) {
   for (let i = array.length - 1; i > 0; i--) {
