@@ -41,6 +41,7 @@ def root():
   return "Not available"
 
 def format_movie(frame):
+  print(frame)
   return ({
     "id": frame['id'],
     "imdbId": frame['imdb_id'],
@@ -48,6 +49,25 @@ def format_movie(frame):
     "releaseYear": frame["year"],
     "imageUrl": "https://image.tmdb.org/t/p/w500/%s" % frame["poster_path"],
   })
+
+
+def recommendationRecentPopular():
+  MIN_YEAR = 2010
+  MIN_COUNT = 1000
+  by_rating = movies[(movies['year'] >= MIN_YEAR) & (movies['vote_count'] >= MIN_COUNT)].sort_values("vote_average")
+  return by_rating.tail(50).sample(20)
+
+def recommendationHighlyRated():
+  MIN_COUNT = 1000
+  MIN_VOTE = 8.0
+  by_rating = movies[(movies['vote_average'] >= MIN_VOTE) & (movies['vote_count'] >= MIN_COUNT)]
+  return by_rating.sample(20)
+
+def recommendationPersonalized():
+  # Completely random, an excellent choice, but only those
+  # for which we have at least 10 ratings and poster image available
+  # for better visual effects
+  return movies[(movies['vote_count'] >= 10) & (movies['poster_path'] != "")].sample(20)
 
 API_VERSION = "v1"
 
@@ -59,6 +79,19 @@ def apiMovies(movieId):
       "match_count" : len(movie_match)
     }), 404)
   return jsonify(format_movie(movie_match.iloc[0]))
+
+
+@app.route('/api/%s/recommendation/recentPopular' % API_VERSION, methods=["GET"])
+def apiRecommendationRecentPopular():
+  return jsonify(list(recommendationRecentPopular().apply(format_movie, axis=1)))
+
+@app.route('/api/%s/recommendation/highlyRated' % API_VERSION, methods=["GET"])
+def apiRecommendationHighlyRated():
+  return jsonify(list(recommendationHighlyRated().apply(format_movie, axis=1)))
+
+@app.route('/api/%s/recommendation/personalized' % API_VERSION, methods=["GET"])
+def apiRecommendationPersonalized():
+  return jsonify(list(recommendationPersonalized().apply(format_movie, axis=1)))
 
 if __name__ == '__main__':
     app.run()
