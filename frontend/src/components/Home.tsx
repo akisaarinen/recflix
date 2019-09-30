@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { MovieList } from './MovieList'
 
+import './Home.css'
+
 import * as api from '../api/client'
 
 interface MovieLists {
