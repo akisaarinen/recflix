@@ -39,9 +39,10 @@ export const Home: React.FunctionComponent<any> = (props) => {
     fetchLists()
   })
 
-  return (<>
-    <h4>Recommended for you</h4>
-    <MovieList movies={lists.recommended || []}/>
+  // Remove until we have an algo..
+  // <h4>Recommended for you</h4>
+  // <MovieList movies={lists.recommended || []}/>
+return (<>
     <h4>Popular Recent Movies</h4>
     <MovieList movies={lists.popular || []}/>
     <h4>Highly Rated Classics</h4>
