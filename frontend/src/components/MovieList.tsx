@@ -1,5 +1,6 @@
 import React from 'react'
 import { Image } from 'react-bootstrap'
+import { Link } from "react-router-dom"
 
 import * as api from '../api/client'
 
@@ -14,10 +15,12 @@ export const MovieList: React.FunctionComponent<MovieListProps> = (props) => {
     { props.movies.map(movie =>
       <div className="movieList--content">
         <div className="movieList--content__box">
-          <Image src={movie.imageUrl} fluid />
-          <div className="textOverlay">
-            { movie.title }
-          </div>
+          <Link to={`/movies/${movie.imdbId}`}>
+            <Image src={movie.imageUrl} fluid />
+            <div className="textOverlay">
+              { movie.title }
+            </div>
+          </Link>
         </div>
       </div>
       )

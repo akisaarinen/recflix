@@ -18,10 +18,10 @@ export interface Movie {
 export type Recommendations = MovieId[]
 
 export async function getMovie(params: {
-  movieId: string,
+  imdbId: string,
 }): Promise<Movie|null> {
   return httpClient
-    .get<Movie>(`movie/${params.movieId}`)
+    .get<Movie>(`movie/${params.imdbId}`)
     .then(response => {
       return response.data
     })
