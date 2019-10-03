@@ -50,6 +50,24 @@ def format_movie(frame):
     "imageUrl": "https://image.tmdb.org/t/p/w500/%s" % frame["poster_path"],
   })
 
+def format_movie_details(frame):
+
+  def with_default(val, default_val):
+    if pd.isna(val):
+      return default_val
+    return val
+
+  return ({
+    "id": frame['id'],
+    "imdbId": frame['imdb_id'],
+    "title": frame["title"],
+    "releaseYear": frame["year"],
+    "imageUrl": "https://image.tmdb.org/t/p/w500/%s" % frame["poster_path"],
+    "tagline": with_default(frame["tagline"], ""),
+    "overview": with_default(frame["overview"], ""),
+    "voteAverage": "%.1f" % frame["vote_average"],
+    "voteCount": str(frame["vote_count"]),
+  })
 
 def recommendationRecentPopular():
   MIN_YEAR = 2010
@@ -78,8 +96,7 @@ def apiMovies(movieId):
     return make_response(jsonify({
       "match_count" : len(movie_match)
     }), 404)
-  return jsonify(format_movie(movie_match.iloc[0]))
-
+  return jsonify(format_movie_details(movie_match.iloc[0]))
 
 @app.route('/api/%s/recommendation/recentPopular' % API_VERSION, methods=["GET"])
 def apiRecommendationRecentPopular():
