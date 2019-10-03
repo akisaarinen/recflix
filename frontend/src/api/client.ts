@@ -15,13 +15,20 @@ export interface Movie {
   imageUrl: string,
 }
 
+export interface MovieWithDetails extends Movie {
+  overview: string,
+  tagline: string,
+  voteAverage: number,
+  voteCount: number,
+}
+
 export type Recommendations = MovieId[]
 
 export async function getMovie(params: {
   imdbId: string,
-}): Promise<Movie|null> {
+}): Promise<MovieWithDetails|null> {
   return httpClient
-    .get<Movie>(`movie/${params.imdbId}`)
+    .get<MovieWithDetails>(`movie/${params.imdbId}`)
     .then(response => {
       return response.data
     })
