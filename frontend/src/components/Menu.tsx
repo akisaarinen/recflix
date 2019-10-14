@@ -9,9 +9,9 @@ export const Menu: React.FunctionComponent<any> = (props) => {
       <Nav className="mr-auto">
           <Nav.Link as={Link} to="/">Home</Nav.Link>
       </Nav>
-      <Form inline>
-        <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-        <Button variant="outline-light">Search</Button>
+      <Form action="/search" inline>
+        <FormControl name="query" type="text" placeholder="Search" className="mr-sm-2" />
+        <Button variant="outline-light" type="submit">Search</Button>
       </Form>
     </Navbar>
     <div id='App__scroller' style={{

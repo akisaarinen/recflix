@@ -2,6 +2,7 @@ import React from 'react'
 import './App.css';
 import { Home } from './components/Home'
 import { MovieDetails } from './components/MovieDetails'
+import { Search } from './components/Search'
 import { Menu } from './components/Menu'
 import { BrowserRouter as Router, Route, RouteComponentProps } from "react-router-dom";
 
@@ -20,6 +21,7 @@ const App: React.FC = () => {
           <Home/>
         </Route>
         <Route path="/movies/:imdbId" component={Movie}/>
+        <Route path="/search" component={Search}/>
       </Router>
     </div>
   );

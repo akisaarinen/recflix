@@ -22,6 +22,11 @@ export interface MovieWithDetails extends Movie {
   voteCount: number,
 }
 
+export interface SearchResults {
+  query: string,
+  results: Movie[],
+}
+
 export type Recommendations = MovieId[]
 
 export async function getMovie(params: {
@@ -29,6 +34,16 @@ export async function getMovie(params: {
 }): Promise<MovieWithDetails|null> {
   return httpClient
     .get<MovieWithDetails>(`movie/${params.imdbId}`)
+    .then(response => {
+      return response.data
+    })
+}
+
+export async function search(params: {
+  query: string
+}): Promise<SearchResults> {
+  return httpClient
+    .get<SearchResults>(`search/${params.query}`)
     .then(response => {
       return response.data
     })

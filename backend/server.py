@@ -105,6 +105,13 @@ def recommendationPersonalized():
   # for better visual effects
   return movies[(movies['vote_count'] >= 10) & (movies['poster_path'] != "")].sample(20)
 
+def searchMovies(query):
+  # Find all title matches
+  title_match = movies[movies['title'].str.contains(query)]
+  # Sort by vote count (approximating popularity)
+  title_match = title_match.sort_values(by="vote_count", ascending=False)
+  return title_match.head(20)
+
 API_VERSION = "v1"
 
 @app.route('/api/%s/movie/<imdbId>' % API_VERSION, methods=["GET"])
@@ -136,6 +143,17 @@ def apiRecommendationHighlyRated():
 @app.route('/api/%s/recommendation/personalized' % API_VERSION, methods=["GET"])
 def apiRecommendationPersonalized():
   return jsonify(list(recommendationPersonalized().apply(format_movie, axis=1)))
+
+@app.route('/api/%s/search/<query>' % API_VERSION, methods=["GET"])
+def apiSearchMovies(query):
+  results = searchMovies(query)
+  movie_list = []
+  if results.shape[0]:
+    movie_list = list(results.apply(format_movie, axis=1))
+  return jsonify({
+    "query": query,
+    "results": movie_list,
+  })
 
 if __name__ == '__main__':
     app.run()
