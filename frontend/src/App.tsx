@@ -14,14 +14,13 @@ function Movie({ match }: RouteComponentProps<TMovieParams>) {
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Menu>
-        <Router>
-          <Route path="/" exact>
-            <Home/>
-          </Route>
-          <Route path="/movies/:imdbId" component={Movie}/>
-        </Router>
-      </Menu>
+      <Router>
+        <Menu/>
+        <Route path="/" exact>
+          <Home/>
+        </Route>
+        <Route path="/movies/:imdbId" component={Movie}/>
+      </Router>
     </div>
   );
 }
