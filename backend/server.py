@@ -7,34 +7,7 @@ app = Flask(__name__)
 # Note: no restrictions atm
 CORS(app)
 
-movies = pd.read_csv("data/the-movies-dataset/movies_metadata.csv", dtype={
-  'adult': str,
-  'belongs_to_collection': object,
-  'budget': int,
-  'genres': object,
-  'homepage': str,
-  'id': str,
-  'imdb_id': str,
-  'original_language': str,
-  'original_title': str,
-  'overview': str,
-  'popularity': float,
-  'poster_path': str,
-  'production_companies': object,
-  'production_countries': object,
-  'release_date': str,
-  'revenue': int,
-  'runtime': float,
-  'spoken_languages': object,
-  'status': str,
-  'tagline': str,
-  'title': str,
-  'video': str,
-  'vote_average': float,
-  'vote_count': int,
-}, parse_dates=["release_date"])
-
-movies['year'] = movies['release_date'].map(lambda x: x.year)
+movies = pd.read_csv("data/movies_metadata_recflix.csv.gz")
 
 @app.route('/')
 def root():
@@ -43,7 +16,6 @@ def root():
 def format_movie(frame):
   print(frame)
   return ({
-    "id": frame['id'],
     "imdbId": frame['imdb_id'],
     "title": frame["title"],
     "releaseYear": frame["year"],
@@ -51,6 +23,7 @@ def format_movie(frame):
   })
 
 def format_movie_details(frame):
+  print(frame)
 
   def with_default(val, default_val):
     if pd.isna(val):
@@ -58,10 +31,9 @@ def format_movie_details(frame):
     return val
 
   return ({
-    "id": frame['id'],
     "imdbId": frame['imdb_id'],
     "title": frame["title"],
-    "releaseYear": frame["year"],
+    "releaseYear": str(frame["year"]),
     "imageUrl": "https://image.tmdb.org/t/p/w500/%s" % frame["poster_path"],
     "tagline": with_default(frame["tagline"], ""),
     "overview": with_default(frame["overview"], ""),
