@@ -3,6 +3,8 @@ import { Container, Row, Col, Image, Spinner } from 'react-bootstrap'
 
 import * as api from '../api/client'
 
+import { MovieList } from './MovieList'
+
 import './MovieDetails.css'
 
 interface MovieDetailsProps {
@@ -23,10 +25,16 @@ function createStars(voteAverage: number) {
 }
 export const MovieDetails: React.FunctionComponent<MovieDetailsProps> = (props) => {
   const [movie, setMovie]  = useState<api.MovieWithDetails|null>(null)
+  const [recs, setRecs] = useState<api.Movie[]>([])
 
   useEffect(() => {
-    if (!!movie) return
-    api.getMovie({ imdbId: props.imdbId }).then(movie => setMovie(movie))
+    if (!!movie && movie.imdbId == props.imdbId) return
+    const getMovie = api.getMovie({ imdbId: props.imdbId })
+    const getRecs  = api.getSimilarItems({ imdbId: props.imdbId })
+    Promise.all([getMovie, getRecs]).then(([movie, recs]) => {
+      setMovie(movie)
+      setRecs(recs)
+    })
   })
 
   if (!movie) {
@@ -48,5 +56,7 @@ export const MovieDetails: React.FunctionComponent<MovieDetailsProps> = (props) 
         </Col>
       </Row>
     </Container>
+    <h4>People who liked this, also liked:</h4>
+    <MovieList movies={recs}/>
   </>)
 }

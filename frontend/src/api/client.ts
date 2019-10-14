@@ -34,6 +34,16 @@ export async function getMovie(params: {
     })
 }
 
+export async function getSimilarItems(params: {
+  imdbId: string
+}): Promise<Movie[]> {
+  return httpClient
+    .get<Movie[]>(`recommendation/similarItems/${params.imdbId}`)
+    .then(response => {
+      return response.data
+    })
+}
+
 export async function getRecommendedMovies(params: {
   userId: string
 }): Promise<Movie[]> {
