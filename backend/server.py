@@ -107,7 +107,7 @@ def recommendationPersonalized():
 
 def searchMovies(query):
   # Find all title matches
-  title_match = movies[movies['title'].str.contains(query)]
+  title_match = movies[movies['title'].map(lambda x: x.lower()).str.contains(query.lower())]
   # Sort by vote count (approximating popularity)
   title_match = title_match.sort_values(by="vote_count", ascending=False)
   return title_match.head(20)
