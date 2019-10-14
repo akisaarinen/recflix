@@ -18,7 +18,7 @@ export const MovieList: React.FunctionComponent<MovieListProps> = (props) => {
           <Link to={`/movies/${movie.imdbId}`}>
             <Image src={movie.imageUrl} fluid />
             <div className="textOverlay">
-              { movie.title }
+              { movie.title } ({movie.releaseYear})
             </div>
           </Link>
         </div>
